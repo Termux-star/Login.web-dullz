@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+        .logout-button {
+            background-color: #f44336;
+            margin-top: 10px;
+        }
+        .logout-button:hover {
+            background-color: #e53935;
+        }
+        .login-container p {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .login-container a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .login-container a:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2 id="title">Login</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="button" id="loginButton" onclick="login()">Login</button>
+            <button type="button" id="logoutButton" class="logout-button hidden" onclick="logout()">Logout</button>
+        </form>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+
+                document.getElementById('message').textContent = `Login berhasil! Selamat datang, ${username}.`;
+                document.getElementById('message').style.color = 'green';
+                updateUI(true);
+            } else {
+                document.getElementById('message').textContent = 'Harap isi semua kolom.';
+                document.getElementById('message').style.color = 'red';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('username');
+            localStorage.removeItem('password');
+
+            document.getElementById('message').textContent = 'Anda telah logout.';
+            document.getElementById('message').style.color = 'blue';
+            updateUI(false);
+        }
+
+        function updateUI(isLoggedIn) {
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginButton = document.getElementById('loginButton');
+            const logoutButton = document.getElementById('logoutButton');
+            const title = document.getElementById('title');
+
+            if (isLoggedIn) {
+                const savedUsername = localStorage.getItem('username');
+                title.textContent = `Halo, ${savedUsername}!`;
+                usernameInput.classList.add('hidden');
+                passwordInput.classList.add('hidden');
+                loginButton.classList.add('hidden');
+                logoutButton.classList.remove('hidden');
+            } else {
+                title.textContent = 'Login';
+                usernameInput.classList.remove('hidden');
+                passwordInput.classList.remove('hidden');
+                loginButton.classList.remove('hidden');
+                logoutButton.classList.add('hidden');
+            }
+        }
+
+        window.onload = function () {
+            const savedUsername = localStorage.getItem('username');
+            if (savedUsername) {
+                updateUI(true);
+                document.getElementById('message').textContent = `Selamat datang kembali, ${savedUsername}!`;
+                document.getElementById('message').style.color = 'blue';
+            } else {
+                updateUI(false);
+            }
+        };
+    </script>
+</body>
+</html>
